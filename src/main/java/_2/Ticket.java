@@ -30,7 +30,7 @@ public class Ticket {
     setEventTime(time);
     setStadiumSector(stadiumSector);
     setMaxBackpackWeight(maxBackpackWeight);
-    setTicketPrice(BigDecimal.valueOf(ticketPrice));
+    setTicketPrice(ticketPrice);
 
     this.ID = generateNextTicketID();
     this.isPromo = isPromo;
@@ -133,10 +133,10 @@ public class Ticket {
     return ticketPrice;
   }
 
-  public void setTicketPrice(BigDecimal ticketPrice) {
+  public void setTicketPrice(double ticketPrice) {
 
-    if (ticketPrice.compareTo(BigDecimal.ZERO) >= 0) {
-      this.ticketPrice = ticketPrice;
+    if (ticketPrice >= 0) {
+      this.ticketPrice = BigDecimal.valueOf(ticketPrice);
     } else {
       throw new IllegalArgumentException("Invalid Ticket Price. Must be a positive value.");
     }
