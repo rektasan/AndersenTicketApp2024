@@ -8,7 +8,7 @@ public class Main {
 
   public static void main(String[] args) {
 
-    /*Scanner scanner = new Scanner(System.in);
+    Scanner scanner = new Scanner(System.in);
     TicketService eventTickets = new TicketService(10);
 
     System.out.println("The list of all tickets:");
@@ -24,7 +24,7 @@ public class Main {
       System.out.println("Ticket with id - " + inputID + " was not found.");
     }
 
-    scanner.close();*/
+    scanner.close();
 
   }
 }

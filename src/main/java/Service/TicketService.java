@@ -21,6 +21,10 @@ public class TicketService {
 
   }
 
+  public Ticket getTicketById(String id) {
+    return tempTicketStorageMap.get(id);
+  }
+
   public void printAllTickets() {
     tempTicketStorageMap.values().forEach(System.out::println);
   }
