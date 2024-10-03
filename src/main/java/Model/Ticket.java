@@ -1,29 +1,26 @@
-package _2;
+package Model;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 public class Ticket {
 
-  private static int lastTicketID = 0;
-  private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd, HH:mm");
+  private final String ID = generateRandomID();
+  private final LocalDateTime CREATION_TIME = LocalDateTime.now();
 
-  private final String ID;
-  private String concertHall;
   private int eventCode;
   private long eventTime;
   private boolean isPromo;
-  private char stadiumSector;
   private double maxBackpackWeight;
-  private final LocalDateTime creationTime;
+
+  private String concertHall;
+  private StadiumSectors stadiumSector;
   private BigDecimal ticketPrice;
 
-  public Ticket(String concertHall, int eventCode, long time, boolean isPromo, char stadiumSector, double maxBackpackWeight,
-      double ticketPrice) {
+  public Ticket(String concertHall, int eventCode, long time, boolean isPromo, StadiumSectors stadiumSector, double maxBackpackWeight,
+      BigDecimal ticketPrice) {
 
     setConcertHall(concertHall);
     setEventCode(eventCode);
@@ -32,9 +29,7 @@ public class Ticket {
     setMaxBackpackWeight(maxBackpackWeight);
     setTicketPrice(ticketPrice);
 
-    this.ID = generateNextTicketID();
     this.isPromo = isPromo;
-    this.creationTime = LocalDateTime.now();
 
   }
 
@@ -44,19 +39,19 @@ public class Ticket {
     setEventCode(eventCode);
     setEventTime(time);
 
-    this.ID = generateNextTicketID();
-    this.creationTime = LocalDateTime.now();
-
   }
 
-  public Ticket() {
-    this.ID = generateNextTicketID();
-    this.creationTime = LocalDateTime.now();
-  }
+  public Ticket() {  }
+
 
   public String getID() {
     return ID;
   }
+
+  public String generateRandomID() {
+    return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 4);
+  }
+
 
   public String getConcertHall() {
     return concertHall;
@@ -72,6 +67,7 @@ public class Ticket {
 
   }
 
+
   public int getEventCode() {
     return eventCode;
   }
@@ -85,6 +81,7 @@ public class Ticket {
     }
 
   }
+
 
   public long getEventTime() {
     return eventTime;
@@ -101,19 +98,17 @@ public class Ticket {
 
   }
 
-  public char getStadiumSector() {
+
+  public StadiumSectors getStadiumSector() {
     return stadiumSector;
   }
 
-  public void setStadiumSector(char stadiumSector) {
+  public void setStadiumSector(StadiumSectors stadiumSector) {
 
-    if (stadiumSector >= 'A' && stadiumSector <= 'C') {
-      this.stadiumSector = stadiumSector;
-    } else {
-      throw new IllegalArgumentException("Invalid Stadium Sector. Must be A, B or C.");
-    }
+    this.stadiumSector = stadiumSector;
 
   }
+
 
   public double getMaxBackpackWeight() {
     return maxBackpackWeight;
@@ -129,53 +124,34 @@ public class Ticket {
 
   }
 
+
   public BigDecimal getTicketPrice() {
     return ticketPrice;
   }
 
-  public void setTicketPrice(double ticketPrice) {
+  public void setTicketPrice(BigDecimal ticketPrice) {
 
-    if (ticketPrice >= 0) {
-      this.ticketPrice = BigDecimal.valueOf(ticketPrice);
+    if (ticketPrice.compareTo(BigDecimal.ZERO) >= 0) {
+      this.ticketPrice = ticketPrice;
     } else {
-      throw new IllegalArgumentException("Invalid Ticket Price. Must be a positive value.");
+      throw new IllegalArgumentException("Invalid Model.Ticket Price. Must be a positive value.");
     }
 
   }
+
 
   public boolean isPromo() {
     return isPromo;
   }
 
-  public LocalDateTime getCreationTime() {
-    return creationTime;
+  public LocalDateTime getCREATION_TIME() {
+    return CREATION_TIME;
   }
 
-
-  private String generateNextTicketID() {
-    lastTicketID++;
-    return String.valueOf(lastTicketID);
-
-  }
-
-  public void printTicketInfo() {
-    System.out.println("******************************\n" +
-        "Ticket Info:" +
-        "\n" + "Ticket ID: " + getID() +
-        "\n" + "Concert Hall: " + getConcertHall() +
-        "\n" + "Event Code: " + getEventCode() +
-        "\n" + "Event Time: " + LocalDateTime.ofInstant(Instant.ofEpochSecond(getEventTime()), ZoneId.systemDefault()).format(FORMATTER) +
-        "\n" + "Promo: " + (isPromo() ? "Yes" : "No") +
-        "\n" + "Stadium Sector: " + getStadiumSector() +
-        "\n" + "Max Backpack Weight: " + getMaxBackpackWeight() +
-        "\n" + "Creation Time: " + getCreationTime().format(FORMATTER) +
-        "\n" + "Price: $" + getTicketPrice() +
-        "\n******************************");
-  }
 
   @Override
   public String toString() {
-    return "Ticket{" +
+    return "Model.Ticket{" +
         "id=" + ID +
         ", concertHall=" + concertHall +
         ", eventCode=" + eventCode +
@@ -183,7 +159,7 @@ public class Ticket {
         ", isPromo=" + isPromo +
         ", stadiumSector=" + stadiumSector +
         ", maxBackpackWeight=" + maxBackpackWeight +
-        ", creationTime=" + creationTime +
+        ", CREATION_TIME=" + CREATION_TIME +
         ", ticketPrice=" + ticketPrice +
         '}';
   }
