@@ -1,15 +1,21 @@
 package Model;
 
+import Interfaces.Identifiable;
+import Interfaces.Printable;
+import Model.enums.StadiumSectors;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Objects;
 import java.util.UUID;
 
-public class Ticket {
+public class Ticket implements Identifiable, Printable {
 
-  private final String ID = generateRandomID();
+  private final String TICKET_ID = generateRandomTicketId();
   private final LocalDateTime CREATION_TIME = LocalDateTime.now();
 
+  private int classId;
   private int eventCode;
   private long eventTime;
   private boolean isPromo;
@@ -19,7 +25,8 @@ public class Ticket {
   private StadiumSectors stadiumSector;
   private BigDecimal ticketPrice;
 
-  public Ticket(String concertHall, int eventCode, long time, boolean isPromo, StadiumSectors stadiumSector, double maxBackpackWeight,
+
+  public Ticket(int classId, String concertHall, int eventCode, long time, boolean isPromo, StadiumSectors stadiumSector, double maxBackpackWeight,
       BigDecimal ticketPrice) {
 
     setConcertHall(concertHall);
@@ -29,6 +36,7 @@ public class Ticket {
     setMaxBackpackWeight(maxBackpackWeight);
     setTicketPrice(ticketPrice);
 
+    this.classId = classId;
     this.isPromo = isPromo;
 
   }
@@ -41,14 +49,26 @@ public class Ticket {
 
   }
 
-  public Ticket() {  }
-
-
-  public String getID() {
-    return ID;
+  public Ticket() {
   }
 
-  public String generateRandomID() {
+
+  @Override
+  public int getClassId() {
+    return this.classId;
+  }
+
+  @Override
+  public void setClassId(int id) {
+    this.classId = id;
+  }
+
+
+  public String getTICKET_ID() {
+    return TICKET_ID;
+  }
+
+  private String generateRandomTicketId() {
     return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 4);
   }
 
@@ -57,14 +77,12 @@ public class Ticket {
     return concertHall;
   }
 
-  public void setConcertHall(String concertHall) {
-
+  private void setConcertHall(String concertHall) {
     if (concertHall != null && concertHall.length() <= 10) {
       this.concertHall = concertHall;
     } else {
       throw new IllegalArgumentException("Invalid Concert Hall. Must not exceed 10 characters.");
     }
-
   }
 
 
@@ -72,14 +90,12 @@ public class Ticket {
     return eventCode;
   }
 
-  public void setEventCode(int eventCode) {
-
+  private void setEventCode(int eventCode) {
     if (eventCode >= 100 && eventCode <= 999) {
       this.eventCode = eventCode;
     } else {
       throw new IllegalArgumentException("Invalid Event Code. Must use a 3 digit number.");
     }
-
   }
 
 
@@ -95,7 +111,6 @@ public class Ticket {
     } else {
       throw new IllegalArgumentException("Invalid Timestamp. Must not be in the past.");
     }
-
   }
 
 
@@ -104,9 +119,7 @@ public class Ticket {
   }
 
   public void setStadiumSector(StadiumSectors stadiumSector) {
-
     this.stadiumSector = stadiumSector;
-
   }
 
 
@@ -114,14 +127,12 @@ public class Ticket {
     return maxBackpackWeight;
   }
 
-  public void setMaxBackpackWeight(double maxBackpackWeight) {
-
+  private void setMaxBackpackWeight(double maxBackpackWeight) {
     if (maxBackpackWeight > 0) {
       this.maxBackpackWeight = maxBackpackWeight;
     } else {
       throw new IllegalArgumentException("Invalid Backpack Weight. Must be a positive value.");
     }
-
   }
 
 
@@ -129,7 +140,7 @@ public class Ticket {
     return ticketPrice;
   }
 
-  public void setTicketPrice(BigDecimal ticketPrice) {
+  private void setTicketPrice(BigDecimal ticketPrice) {
 
     if (ticketPrice.compareTo(BigDecimal.ZERO) >= 0) {
       this.ticketPrice = ticketPrice;
@@ -149,10 +160,25 @@ public class Ticket {
   }
 
 
+  public void share(String phone) {
+    System.out.println("Ticket is shared by phone: " + phone);
+  }
+
+  public void share(String phone, String email) {
+    System.out.println("Ticket is shared by phone: " + phone + ", and by email: " + email);
+  }
+
+
+  @Override
+  public void print() {
+    System.out.println("Ticket's print() method : " + this);
+  }
+
   @Override
   public String toString() {
-    return "Model.Ticket{" +
-        "id=" + ID +
+    return "Ticket{" +
+        "classId=" + classId +
+        ",TICKET_ID=" + TICKET_ID +
         ", concertHall=" + concertHall +
         ", eventCode=" + eventCode +
         ", eventTime=" + eventTime +
@@ -162,5 +188,24 @@ public class Ticket {
         ", CREATION_TIME=" + CREATION_TIME +
         ", ticketPrice=" + ticketPrice +
         '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Ticket ticket)) {
+      return false;
+    }
+    return classId == ticket.classId && eventCode == ticket.eventCode && eventTime == ticket.eventTime && isPromo == ticket.isPromo
+        && Double.compare(maxBackpackWeight, ticket.maxBackpackWeight) == 0 && Objects.equals(TICKET_ID, ticket.TICKET_ID)
+        && Objects.equals(CREATION_TIME, ticket.CREATION_TIME) && Objects.equals(concertHall, ticket.concertHall)
+        && stadiumSector == ticket.stadiumSector && Objects.equals(ticketPrice, ticket.ticketPrice);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(TICKET_ID, CREATION_TIME, classId, eventCode, eventTime, isPromo, maxBackpackWeight, concertHall, stadiumSector, ticketPrice);
   }
 }

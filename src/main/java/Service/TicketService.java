@@ -1,19 +1,32 @@
 package Service;
 
-import Model.StadiumSectors;
+import Model.enums.StadiumSectors;
 import Model.Ticket;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TicketService {
 
-  public static void main(String[] args) {
+  private Map<String, Ticket> tempTicketStorageMap;
 
-    Ticket ticketEmpty = new Ticket();
-    Ticket ticketLimited = new Ticket("Main", 100, 1747943141);
-    Ticket ticketFull = new Ticket("Main", 101, 1747943141, true, StadiumSectors.A, 50, new BigDecimal("69.99") );
+  public TicketService(int numberOfTickets) {
 
-    System.out.println(ticketEmpty + "\n" + ticketLimited + "\n" + ticketFull);
+    tempTicketStorageMap = new HashMap<>();
+
+    for (int i = 0; i<numberOfTickets; i++) {
+      Ticket ticket = new Ticket("Main Hall", 100, 1730000000, true, StadiumSectors.A, 50, new BigDecimal("69.99"));
+      tempTicketStorageMap.put(ticket.getTICKET_ID(), ticket);
+    }
+
   }
 
+  public Ticket getTicketById(String id) {
+    return tempTicketStorageMap.get(id);
+  }
+
+  public void printAllTickets() {
+    tempTicketStorageMap.values().forEach(System.out::println);
+  }
 
 }
