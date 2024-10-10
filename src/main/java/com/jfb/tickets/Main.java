@@ -24,8 +24,8 @@ public class Main {
     if (targetTicket != null) {
       System.out.println("Ticket found: " + targetTicket);
       System.out.println("\nPolymorphism examples:");
-      Admin admin = new Admin(1);
-      Client client = new Client(2);
+      Admin admin = new Admin();
+      Client client = new Client();
 
       System.out.println(admin);
       admin.printRole();

@@ -24,26 +24,22 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class Ticket implements Identifiable, Printable {
 
+  private final int CLASS_ID = generateClassId();
   private final String TICKET_ID = generateRandomTicketId();
   private String concertHall;
   private int eventCode;
-
   @Setter
   private LocalDateTime eventTime;
-
   private boolean isPromo;
-
   @Setter
   private StadiumSectors stadiumSector;
-
   private double maxBackpackWeight;
   @NullableWarning
   private BigDecimal ticketPrice;
   private final LocalDateTime CREATION_TIME = LocalDateTime.now();
-  private int classId;
 
   public Ticket(String concertHall, int eventCode, LocalDateTime time, boolean isPromo, StadiumSectors stadiumSector,
-      double maxBackpackWeight, BigDecimal ticketPrice, int classId) {
+      double maxBackpackWeight, BigDecimal ticketPrice) {
     try {
       TicketValidator.validateConcertHall(concertHall);
       TicketValidator.validateEventCode(eventCode);
@@ -51,7 +47,6 @@ public class Ticket implements Identifiable, Printable {
       TicketValidator.validateMaxBackpackWeight(maxBackpackWeight);
       TicketValidator.validateTicketPrice(ticketPrice);
 
-      this.classId = classId;
       this.concertHall = concertHall;
       this.eventCode = eventCode;
       this.eventTime = time;
@@ -86,12 +81,7 @@ public class Ticket implements Identifiable, Printable {
 
   @Override
   public int getClassId() {
-    return this.classId;
-  }
-
-  @Override
-  public void setClassId(int id) {
-    this.classId = id;
+    return this.CLASS_ID;
   }
 
   @Override

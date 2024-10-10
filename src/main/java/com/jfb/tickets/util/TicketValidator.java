@@ -1,9 +1,17 @@
 package com.jfb.tickets.util;
 
+import com.jfb.tickets.util.interfaces.Identifiable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class TicketValidator {
+public class TicketValidator implements Identifiable {
+
+  private final int CLASS_ID = generateClassId();
+
+  @Override
+  public int getClassId() {
+    return this.CLASS_ID;
+  }
 
   public static void validateConcertHall(String concertHall) {
     if (concertHall == null || concertHall.length() > 10) {

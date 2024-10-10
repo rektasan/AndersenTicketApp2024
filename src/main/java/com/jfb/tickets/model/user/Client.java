@@ -1,32 +1,31 @@
 package com.jfb.tickets.model.user;
 
 import com.jfb.tickets.model.ticket.Ticket;
+import com.jfb.tickets.util.Constants;
+
 import lombok.ToString;
 
 @ToString
-public class Client extends User{
+public class Client extends User {
 
-  public Client(int classId) {
-    this.classId = classId;
-    role = "client";
-  }
+  private final int CLASS_ID = generateClassId();
 
-  public void getTicket(Ticket ticket) {
-    System.out.println(ticket + " \nis being received by " + role);
+  public Client() {
+    role = Constants.CLIENT_ROLE;
   }
 
   @Override
   public int getClassId() {
-    return this.classId;
-  }
-
-  @Override
-  public void setClassId(int id) {
-    this.classId = id;
+    return this.CLASS_ID;
   }
 
   @Override
   public void printRole() {
     System.out.println("Role: " + role);
   }
+
+  public void getTicket(Ticket ticket) {
+    System.out.println(ticket + " \nis being received by " + role);
+  }
+
 }
