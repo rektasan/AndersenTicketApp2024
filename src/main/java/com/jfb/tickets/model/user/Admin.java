@@ -1,5 +1,9 @@
-package Model.User;
+package com.jfb.tickets.model.user;
 
+import com.jfb.tickets.model.ticket.Ticket;
+import lombok.ToString;
+
+@ToString
 public class Admin extends User {
 
   public Admin(int classId) {
@@ -7,8 +11,8 @@ public class Admin extends User {
     role = "admin";
   }
 
-  public void checkTicket() {
-    System.out.println("Ticket is being checked by " + role);
+  public void checkTicket(Ticket ticket) {
+    System.out.println(ticket + " \nis being checked by " + role);
   }
 
   @Override

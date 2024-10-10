@@ -1,6 +1,6 @@
-package Model.User;
+package com.jfb.tickets.model.user;
 
-import Interfaces.Identifiable;
+import com.jfb.tickets.util.interfaces.Identifiable;
 
 public abstract class User implements Identifiable {
   protected int classId;

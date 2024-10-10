@@ -1,8 +1,8 @@
-package Service;
+package com.jfb.tickets.service;
 
-import Model.enums.StadiumSectors;
-import Model.Ticket;
-import java.math.BigDecimal;
+import com.jfb.tickets.model.ticket.Ticket;
+
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,8 +14,8 @@ public class TicketService {
 
     tempTicketStorageMap = new HashMap<>();
 
-    for (int i = 0; i<numberOfTickets; i++) {
-      Ticket ticket = new Ticket("Main Hall", 100, 1730000000, true, StadiumSectors.A, 50, new BigDecimal("69.99"));
+    for (int i = 0; i < numberOfTickets; i++) {
+      Ticket ticket = new Ticket("Main", 101, LocalDateTime.of(2024, 12, 31, 0, 0));
       tempTicketStorageMap.put(ticket.getTICKET_ID(), ticket);
     }
 

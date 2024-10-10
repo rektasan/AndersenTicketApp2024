@@ -1,4 +1,4 @@
-package Model.enums;
+package com.jfb.tickets.model.ticket.enums;
 
 public enum StadiumSectors {
   A,

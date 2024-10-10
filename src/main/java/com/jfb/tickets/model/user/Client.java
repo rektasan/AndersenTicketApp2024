@@ -1,5 +1,9 @@
-package Model.User;
+package com.jfb.tickets.model.user;
 
+import com.jfb.tickets.model.ticket.Ticket;
+import lombok.ToString;
+
+@ToString
 public class Client extends User{
 
   public Client(int classId) {
@@ -7,8 +11,8 @@ public class Client extends User{
     role = "client";
   }
 
-  public void getTicket() {
-    System.out.println(role + " is getting a ticket");
+  public void getTicket(Ticket ticket) {
+    System.out.println(ticket + " \nis being received by " + role);
   }
 
   @Override
@@ -23,6 +27,6 @@ public class Client extends User{
 
   @Override
   public void printRole() {
-    System.out.println("Role :" + role);
+    System.out.println("Role: " + role);
   }
 }
