@@ -5,12 +5,13 @@ import com.jfb.tickets.model.user.Client;
 import com.jfb.tickets.model.ticket.Ticket;
 import com.jfb.tickets.service.TicketService;
 
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class Main {
 
   public static void main(String[] args) {
-
+    HashSet<String> set = new HashSet<>();
     TicketService eventTickets = new TicketService(10);
     Scanner scanner = new Scanner(System.in);
 

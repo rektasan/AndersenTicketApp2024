@@ -1,24 +1,23 @@
 package com.jfb.tickets.service;
 
 import com.jfb.tickets.model.ticket.Ticket;
-
 import com.jfb.tickets.util.interfaces.Identifiable;
+import com.jfb.tickets.util.storage.DisarrayList;
+
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TicketService implements Identifiable {
 
   private final int CLASS_ID = generateClassId();
-  private Map<String, Ticket> tempTicketStorageMap;
+  private DisarrayList<Ticket> tempTicketStorage;
 
   public TicketService(int numberOfTickets) {
 
-    tempTicketStorageMap = new HashMap<>();
+    tempTicketStorage = new DisarrayList<>();
 
     for (int i = 0; i < numberOfTickets; i++) {
       Ticket ticket = new Ticket("Main", 101, LocalDateTime.of(2024, 12, 31, 0, 0));
-      tempTicketStorageMap.put(ticket.getTICKET_ID(), ticket);
+      tempTicketStorage.put(ticket);
     }
 
   }
@@ -29,10 +28,19 @@ public class TicketService implements Identifiable {
   }
 
   public Ticket getTicketById(String id) {
-    return tempTicketStorageMap.get(id);
+    for (int i = 0; i < tempTicketStorage.getSize(); i++) {
+      Ticket tempTicket = tempTicketStorage.get(i);
+      if (tempTicket.getTICKET_ID().equals(id)) {
+        return tempTicket;
+      }
+    }
+    return null;
   }
 
   public void printAllTickets() {
-    tempTicketStorageMap.values().forEach(System.out::println);
+    for (int i = 0; i < tempTicketStorage.getSize(); i++) {
+      Ticket tempTicket = tempTicketStorage.get(i);
+      System.out.println(tempTicket);
+    }
   }
 }
