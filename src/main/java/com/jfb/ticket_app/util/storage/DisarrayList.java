@@ -1,6 +1,6 @@
-package com.jfb.tickets.util.storage;
+package com.jfb.ticket_app.util.storage;
 
-import com.jfb.tickets.util.interfaces.Identifiable;
+import com.jfb.ticket_app.util.interfaces.Identifiable;
 
 import java.util.Arrays;
 
@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class DisarrayList<T> implements Identifiable {
 
-  private final int CLASS_ID = generateClassId();
+  private final String CLASS_ID = generateId();
   private final int INITIAL_CAPACITY = 10;
   private final int GROWTH_FACTOR = 2;
 
@@ -59,7 +59,7 @@ public class DisarrayList<T> implements Identifiable {
   }
 
   @Override
-  public int getClassId() {
+  public String getId() {
     return this.CLASS_ID;
   }
 }

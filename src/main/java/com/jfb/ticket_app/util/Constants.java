@@ -1,10 +1,10 @@
-package com.jfb.tickets.util;
+package com.jfb.ticket_app.util;
 
-import com.jfb.tickets.util.interfaces.Identifiable;
+import com.jfb.ticket_app.util.interfaces.Identifiable;
 
 public class Constants implements Identifiable {
 
-  private final int CLASS_ID = generateClassId();
+  private final String CLASS_ID = generateId();
 
   public static final String INVALID_TICKET = "Error instantiating a ticket: ";
   public static final String INVALID_CONCERT_HALL = "Invalid Concert Hall. Must not exceed 10 characters.";
@@ -17,7 +17,7 @@ public class Constants implements Identifiable {
   public static final String ADMIN_ROLE = "admin";
 
   @Override
-  public int getClassId() {
+  public String getId() {
     return this.CLASS_ID;
   }
 

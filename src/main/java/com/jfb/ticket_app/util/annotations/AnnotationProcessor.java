@@ -1,15 +1,15 @@
-package com.jfb.tickets.util.annotations;
+package com.jfb.ticket_app.util.annotations;
 
-import com.jfb.tickets.util.interfaces.Identifiable;
+import com.jfb.ticket_app.util.interfaces.Identifiable;
 import java.lang.reflect.Field;
 
 public class AnnotationProcessor implements Identifiable {
 
-  private final int CLASS_ID = generateClassId();
+  private final String ID = generateId();
 
   @Override
-  public int getClassId() {
-    return this.CLASS_ID;
+  public String getId() {
+    return this.ID;
   }
 
   public static void processAnnotations(Object obj) {
