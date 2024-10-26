@@ -83,6 +83,12 @@ public class Ticket implements Identifiable, Printable {
     }
   }
 
+  public Ticket(String userId, TicketTypes ticketType, Timestamp creationDate) {
+    this.userId = userId;
+    this.ticketType = ticketType;
+    this.creationDate = creationDate;
+  }
+
   public Ticket(String id, String userId, TicketTypes ticketType, Timestamp creationDate) {
     this.id = id;
     this.userId = userId;

@@ -4,7 +4,6 @@ import com.jfb.ticket_app.model.user.Admin;
 import com.jfb.ticket_app.model.user.Client;
 import com.jfb.ticket_app.model.user.User;
 import com.jfb.ticket_app.repository.DatabaseManager;
-import com.jfb.ticket_app.repository.GeneralDao;
 import com.jfb.ticket_app.util.storage.DisarrayList;
 
 import java.sql.Connection;
@@ -13,15 +12,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-public class UserDaoImpl implements GeneralDao<User> {
+public class UserDaoImpl {
 
   private static final String INSERT_USER = "INSERT INTO users (id, name, role) VALUES (?, ?, ?)";
   private static final String SELECT_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
   private static final String DELETE_USER_AND_TICKETS = "DELETE FROM users WHERE id = ?";
   private static final String SELECT_ALL_USERS = "SELECT * FROM users";
 
-  @Override
-  public void save(User o) {
+  public void saveUser(User o) {
     try (Connection connection = DatabaseManager.connect(); PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER)) {
       preparedStatement.setString(1, o.getId());
       preparedStatement.setString(2, o.getName());
@@ -32,8 +30,7 @@ public class UserDaoImpl implements GeneralDao<User> {
     }
   }
 
-  @Override
-  public User fetchById(String id) {
+  public User fetchUserById(String id) {
     try (Connection connection = DatabaseManager.connect(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID)) {
       preparedStatement.setString(1, id);
       ResultSet resultSet = preparedStatement.executeQuery();
@@ -68,8 +65,7 @@ public class UserDaoImpl implements GeneralDao<User> {
     }
   }
 
-  @Override
-  public DisarrayList<User> selectAll() {
+  public DisarrayList<User> selectAllUsers() {
     DisarrayList<User> users = new DisarrayList<>();
     try (Connection connection = DatabaseManager.connect(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS)) {
       ResultSet resultSet = preparedStatement.executeQuery();
