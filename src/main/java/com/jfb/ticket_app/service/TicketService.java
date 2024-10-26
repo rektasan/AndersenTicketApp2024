@@ -1,14 +1,14 @@
-package com.jfb.tickets.service;
+package com.jfb.ticket_app.service;
 
-import com.jfb.tickets.model.ticket.Ticket;
-import com.jfb.tickets.util.interfaces.Identifiable;
-import com.jfb.tickets.util.storage.DisarrayList;
+import com.jfb.ticket_app.model.ticket.Ticket;
+import com.jfb.ticket_app.util.interfaces.Identifiable;
+import com.jfb.ticket_app.util.storage.DisarrayList;
 
 import java.time.LocalDateTime;
 
 public class TicketService implements Identifiable {
 
-  private final int CLASS_ID = generateClassId();
+  private final String CLASS_ID = generateId();
   private DisarrayList<Ticket> tempTicketStorage;
 
   public TicketService(int numberOfTickets) {
@@ -23,14 +23,14 @@ public class TicketService implements Identifiable {
   }
 
   @Override
-  public int getClassId() {
+  public String getId() {
     return this.CLASS_ID;
   }
 
   public Ticket getTicketById(String id) {
     for (int i = 0; i < tempTicketStorage.getSize(); i++) {
       Ticket tempTicket = tempTicketStorage.get(i);
-      if (tempTicket.getTICKET_ID().equals(id)) {
+      if (tempTicket.getId().equals(id)) {
         return tempTicket;
       }
     }

@@ -1,13 +1,15 @@
-package com.jfb.tickets.model.ticket;
+package com.jfb.ticket_app.model.ticket;
 
-import com.jfb.tickets.util.Constants;
-import com.jfb.tickets.util.TicketValidator;
-import com.jfb.tickets.util.annotations.AnnotationProcessor;
-import com.jfb.tickets.util.annotations.NullableWarning;
-import com.jfb.tickets.util.interfaces.Identifiable;
-import com.jfb.tickets.util.interfaces.Printable;
-import com.jfb.tickets.model.ticket.enums.StadiumSectors;
+import com.jfb.ticket_app.model.ticket.enums.TicketTypes;
+import com.jfb.ticket_app.util.Constants;
+import com.jfb.ticket_app.util.TicketValidator;
+import com.jfb.ticket_app.util.annotations.AnnotationProcessor;
+import com.jfb.ticket_app.util.annotations.NullableWarning;
+import com.jfb.ticket_app.util.interfaces.Identifiable;
+import com.jfb.ticket_app.util.interfaces.Printable;
+import com.jfb.ticket_app.model.ticket.enums.StadiumSectors;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -24,8 +26,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class Ticket implements Identifiable, Printable {
 
-  private final int CLASS_ID = generateClassId();
-  private final String TICKET_ID = generateRandomTicketId();
+  private String id = generateId();
+  private String userId;
+  private TicketTypes ticketType;
   private String concertHall;
   private int eventCode;
   @Setter
@@ -36,9 +39,9 @@ public class Ticket implements Identifiable, Printable {
   private double maxBackpackWeight;
   @NullableWarning
   private BigDecimal ticketPrice;
-  private final LocalDateTime CREATION_TIME = LocalDateTime.now();
+  private Timestamp creationDate = Timestamp.valueOf(LocalDateTime.now());
 
-  public Ticket(String concertHall, int eventCode, LocalDateTime time, boolean isPromo, StadiumSectors stadiumSector,
+  public Ticket(TicketTypes ticketType, String concertHall, int eventCode, LocalDateTime time, boolean isPromo, StadiumSectors stadiumSector,
       double maxBackpackWeight, BigDecimal ticketPrice) {
     try {
       TicketValidator.validateConcertHall(concertHall);
@@ -47,6 +50,7 @@ public class Ticket implements Identifiable, Printable {
       TicketValidator.validateMaxBackpackWeight(maxBackpackWeight);
       TicketValidator.validateTicketPrice(ticketPrice);
 
+      this.ticketType = ticketType;
       this.concertHall = concertHall;
       this.eventCode = eventCode;
       this.eventTime = time;
@@ -79,9 +83,26 @@ public class Ticket implements Identifiable, Printable {
     }
   }
 
+  public Ticket(String userId, TicketTypes ticketType, Timestamp creationDate) {
+    this.userId = userId;
+    this.ticketType = ticketType;
+    this.creationDate = creationDate;
+  }
+
+  public Ticket(String id, String userId, TicketTypes ticketType, Timestamp creationDate) {
+    this.id = id;
+    this.userId = userId;
+    this.ticketType = ticketType;
+    this.creationDate = creationDate;
+  }
+
   @Override
-  public int getClassId() {
-    return this.CLASS_ID;
+  public String generateId() {
+    return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 4);
+  }
+  @Override
+  public String getId() {
+    return this.id;
   }
 
   @Override
@@ -89,17 +110,12 @@ public class Ticket implements Identifiable, Printable {
     System.out.println("Ticket's print() method : " + this);
   }
 
-
-  private String generateRandomTicketId() {
-    return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 4);
-  }
-
   public void share(String phone) {
-    System.out.println(this.getTICKET_ID() + " Ticket is shared by phone: " + phone);
+    System.out.println(this.getId() + " Ticket is shared by phone: " + phone);
   }
 
   public void share(String phone, String email) {
-    System.out.println(this.getTICKET_ID() + " Ticket is shared by phone: " + phone + ", and by email: " + email);
+    System.out.println(this.getId() + " Ticket is shared by phone: " + phone + ", and by email: " + email);
   }
 
 }

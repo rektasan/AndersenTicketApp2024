@@ -1,4 +1,4 @@
-package com.jfb.tickets.util.interfaces;
+package com.jfb.ticket_app.util.interfaces;
 
 public interface Printable {
   default void print() {

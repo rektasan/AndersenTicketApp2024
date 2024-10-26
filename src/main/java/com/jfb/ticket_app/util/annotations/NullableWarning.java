@@ -1,4 +1,4 @@
-package com.jfb.tickets.util.annotations;
+package com.jfb.ticket_app.util.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,15 +1,15 @@
-package com.jfb.tickets.util;
+package com.jfb.ticket_app.util;
 
-import com.jfb.tickets.util.interfaces.Identifiable;
+import com.jfb.ticket_app.util.interfaces.Identifiable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class TicketValidator implements Identifiable {
 
-  private final int CLASS_ID = generateClassId();
+  private final String CLASS_ID = generateId();
 
   @Override
-  public int getClassId() {
+  public String getId() {
     return this.CLASS_ID;
   }
 
