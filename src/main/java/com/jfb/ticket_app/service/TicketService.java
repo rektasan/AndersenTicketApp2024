@@ -1,46 +1,37 @@
 package com.jfb.ticket_app.service;
 
 import com.jfb.ticket_app.model.ticket.Ticket;
+import com.jfb.ticket_app.model.ticket.enums.TicketType;
+import com.jfb.ticket_app.repository.dao.TicketDAO;
 import com.jfb.ticket_app.util.interfaces.Identifiable;
-import com.jfb.ticket_app.util.storage.DisarrayList;
+import java.util.List;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
+@NoArgsConstructor
 public class TicketService implements Identifiable {
 
-  private final String CLASS_ID = generateId();
-  private DisarrayList<Ticket> tempTicketStorage;
+  private final TicketDAO ticketDAO = new TicketDAO();
 
-  public TicketService(int numberOfTickets) {
+  private String classId = generateId();
 
-    tempTicketStorage = new DisarrayList<>();
+  public void saveTicket(Ticket ticket) {
+    ticketDAO.saveTicket(ticket);
+  }
 
-    for (int i = 0; i < numberOfTickets; i++) {
-      Ticket ticket = new Ticket("Main", 101, LocalDateTime.of(2024, 12, 31, 0, 0));
-      tempTicketStorage.put(ticket);
-    }
+  public Ticket getTicketById(String id) {
+    return ticketDAO.getTicketById(id);
+  }
 
+  public List<Ticket> getTicketsByUserId(String userId) {
+    return ticketDAO.getTicketsByUserId(userId);
+  }
+
+  public void updateTicketType(String id, TicketType newType) {
+    ticketDAO.updateTicketType(id, newType);
   }
 
   @Override
   public String getId() {
-    return this.CLASS_ID;
-  }
-
-  public Ticket getTicketById(String id) {
-    for (int i = 0; i < tempTicketStorage.getSize(); i++) {
-      Ticket tempTicket = tempTicketStorage.get(i);
-      if (tempTicket.getId().equals(id)) {
-        return tempTicket;
-      }
-    }
-    return null;
-  }
-
-  public void printAllTickets() {
-    for (int i = 0; i < tempTicketStorage.getSize(); i++) {
-      Ticket tempTicket = tempTicketStorage.get(i);
-      System.out.println(tempTicket);
-    }
+    return this.classId;
   }
 }

@@ -1,24 +1,23 @@
 package com.jfb.ticket_app;
 
 import com.jfb.ticket_app.model.ticket.Ticket;
-import com.jfb.ticket_app.model.ticket.enums.TicketTypes;
+import com.jfb.ticket_app.model.ticket.enums.TicketType;
 import com.jfb.ticket_app.model.user.Admin;
 import com.jfb.ticket_app.model.user.Client;
-import com.jfb.ticket_app.repository.dao.TicketDaoImpl;
-import com.jfb.ticket_app.repository.dao.UserDaoImpl;
-import com.jfb.ticket_app.service.TicketService;
+import com.jfb.ticket_app.repository.dao.TicketDAO;
+import com.jfb.ticket_app.repository.dao.UserDAO;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Scanner;
 
-public class Main {
+public class App {
 
   public static void main(String[] args) {
-    testDatabaseTask();
+    testHibernateTask();
   }
 
   public static void testOOPTask() {
-    TicketService eventTickets = new TicketService(10);
+    System.err.println("Uses outdated logic");
+    /*TicketService eventTickets = new TicketService(10);
     Scanner scanner = new Scanner(System.in);
 
     System.out.println("The list of all tickets:");
@@ -48,15 +47,11 @@ public class Main {
     } else {
       System.out.println("Ticket with id - " + inputID + " was not found.");
     }
-    scanner.close();
+    scanner.close();*/
   }
 
-  public static void testCollectionTask() {
-
-  }
-
-  public static void testDatabaseTask() {
-    UserDaoImpl userDao = new UserDaoImpl();
+  public static void testHibernateTask() {
+    UserDAO userDao = new UserDAO();
     Admin adminEntry = new Admin("Boss");
     Client clientEntry = new Client("Client");
 
@@ -64,31 +59,29 @@ public class Main {
     userDao.saveUser(clientEntry);
 
     System.out.println(adminEntry + " " + clientEntry + " are saved in users table inside my_ticket_service_db");
-    System.out.println("All entries in users table: \n" + userDao.selectAllUsers());
 
     System.out.println("Looking up the " + adminEntry + " by id. . .");
-    System.out.println(userDao.fetchUserById(adminEntry.getId()));
+    System.out.println(userDao.getUserById(adminEntry.getId()));
 
-    TicketDaoImpl ticketDao = new TicketDaoImpl();
-    Ticket adminTicket = new Ticket(adminEntry.getId(), TicketTypes.YEAR, Timestamp.valueOf(LocalDateTime.now()));
-    Ticket clientTicket = new Ticket(clientEntry.getId(), TicketTypes.YEAR, Timestamp.valueOf(LocalDateTime.now()));
+    TicketDAO ticketDao = new TicketDAO();
+    Ticket adminTicket = new Ticket(adminEntry, TicketType.YEAR, Timestamp.valueOf(LocalDateTime.now()));
+    Ticket clientTicket = new Ticket(clientEntry, TicketType.YEAR, Timestamp.valueOf(LocalDateTime.now()));
 
     ticketDao.saveTicket(adminTicket);
     ticketDao.saveTicket(clientTicket);
 
-    System.out.println(adminTicket + " " + clientTicket + " are saved in tickets table inside my_ticket_service_db");
-    System.out.println("All entries in tickets table: \n" + userDao.selectAllUsers());
+    System.out.println(adminTicket + " " + clientTicket + " are saved in tickets table inside my_ticket_service_db\n");
 
     System.out.println("Fetching tickets. . .");
-    System.out.println(ticketDao.fetchTicketById(adminTicket.getId()) + "\n" +
-        ticketDao.fetchTicketById(clientTicket.getId()) + "\n" +
-        ticketDao.fetchTicketById(clientTicket.getId()) + "\n" +
-        ticketDao.fetchTicketByUserId(clientEntry.getId()));
+    System.out.println(ticketDao.getTicketById(adminTicket.getId()) + "\n" +
+        ticketDao.getTicketById(clientTicket.getId()) + "\n" +
+        ticketDao.getTicketById(clientTicket.getId()) + "\n" +
+        ticketDao.getTicketsByUserId(clientEntry.getId()));
 
-    ticketDao.updateTicketType(clientEntry.getId(), TicketTypes.MONTH);
+    ticketDao.updateTicketType(clientEntry.getId(), TicketType.MONTH);
 
-    userDao.deleteUserAndTickets(adminEntry.getId());
-    userDao.deleteUserAndTickets(clientEntry.getId());
+    userDao.deleteUserAndTickets(adminEntry);
+    userDao.deleteUserAndTickets(clientEntry);
   }
 
 }
