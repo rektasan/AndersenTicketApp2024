@@ -3,7 +3,11 @@ package com.jfb.ticket_app.model.user;
 import com.jfb.ticket_app.model.ticket.Ticket;
 import com.jfb.ticket_app.util.Constants;
 import java.sql.Timestamp;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@NoArgsConstructor
 public class Admin extends User {
 
   public Admin(String id, String name, Timestamp timestamp) {

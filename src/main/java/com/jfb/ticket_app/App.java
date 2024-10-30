@@ -1,20 +1,25 @@
 package com.jfb.ticket_app;
 
+import com.jfb.ticket_app.config.AppConfig;
 import com.jfb.ticket_app.model.ticket.Ticket;
 import com.jfb.ticket_app.model.ticket.enums.TicketTypes;
 import com.jfb.ticket_app.model.user.Admin;
 import com.jfb.ticket_app.model.user.Client;
-import com.jfb.ticket_app.repository.dao.TicketDaoImpl;
-import com.jfb.ticket_app.repository.dao.UserDaoImpl;
+import com.jfb.ticket_app.repository.dao.TicketDAO;
+import com.jfb.ticket_app.repository.dao.UserDAO;
 import com.jfb.ticket_app.service.TicketService;
-import java.sql.Timestamp;
+
 import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.Scanner;
 
-public class Main {
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class App {
 
   public static void main(String[] args) {
-    testDatabaseTask();
+    testSpringTask();
   }
 
   public static void testOOPTask() {
@@ -55,8 +60,9 @@ public class Main {
 
   }
 
-  public static void testDatabaseTask() {
-    UserDaoImpl userDao = new UserDaoImpl();
+  public static void testSpringTask() {
+    ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+    UserDAO userDao = context.getBean(UserDAO.class);
     Admin adminEntry = new Admin("Boss");
     Client clientEntry = new Client("Client");
 
@@ -64,12 +70,11 @@ public class Main {
     userDao.saveUser(clientEntry);
 
     System.out.println(adminEntry + " " + clientEntry + " are saved in users table inside my_ticket_service_db");
-    System.out.println("All entries in users table: \n" + userDao.selectAllUsers());
 
     System.out.println("Looking up the " + adminEntry + " by id. . .");
-    System.out.println(userDao.fetchUserById(adminEntry.getId()));
+    System.out.println(userDao.getUserById(adminEntry.getId()));
 
-    TicketDaoImpl ticketDao = new TicketDaoImpl();
+    TicketDAO ticketDao = context.getBean(TicketDAO.class);
     Ticket adminTicket = new Ticket(adminEntry.getId(), TicketTypes.YEAR, Timestamp.valueOf(LocalDateTime.now()));
     Ticket clientTicket = new Ticket(clientEntry.getId(), TicketTypes.YEAR, Timestamp.valueOf(LocalDateTime.now()));
 
@@ -77,13 +82,12 @@ public class Main {
     ticketDao.saveTicket(clientTicket);
 
     System.out.println(adminTicket + " " + clientTicket + " are saved in tickets table inside my_ticket_service_db");
-    System.out.println("All entries in tickets table: \n" + userDao.selectAllUsers());
 
     System.out.println("Fetching tickets. . .");
-    System.out.println(ticketDao.fetchTicketById(adminTicket.getId()) + "\n" +
-        ticketDao.fetchTicketById(clientTicket.getId()) + "\n" +
-        ticketDao.fetchTicketById(clientTicket.getId()) + "\n" +
-        ticketDao.fetchTicketByUserId(clientEntry.getId()));
+    System.out.println(ticketDao.getTicketById(adminTicket.getId()) + "\n" +
+        ticketDao.getTicketById(clientTicket.getId()) + "\n" +
+        ticketDao.getTicketById(clientTicket.getId()) + "\n" +
+        ticketDao.getTicketsByUserId(clientEntry.getId()));
 
     ticketDao.updateTicketType(clientEntry.getId(), TicketTypes.MONTH);
 
