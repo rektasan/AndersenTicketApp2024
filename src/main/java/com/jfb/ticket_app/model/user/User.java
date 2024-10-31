@@ -23,6 +23,11 @@ public class User implements Identifiable {
   protected String role;
   protected Timestamp creationTime = Timestamp.valueOf(LocalDateTime.now());
 
+  public User(String name, String role) {
+    this.name = name;
+    this.role = role;
+  }
+
   public void printRole() {
     System.out.println("Role: " + role);
   };
