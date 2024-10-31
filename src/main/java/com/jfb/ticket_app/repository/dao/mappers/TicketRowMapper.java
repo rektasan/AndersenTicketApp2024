@@ -1,7 +1,7 @@
 package com.jfb.ticket_app.repository.dao.mappers;
 
+import com.jfb.ticket_app.model.ticket.enums.TicketType;
 import com.jfb.ticket_app.model.ticket.Ticket;
-import com.jfb.ticket_app.model.ticket.enums.TicketTypes;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +15,7 @@ public class TicketRowMapper implements RowMapper<Ticket> {
     Ticket ticket = new Ticket();
     ticket.setId(resultSet.getString("id"));
     ticket.setUserId(resultSet.getString("user_id"));
-    ticket.setTicketType(TicketTypes.valueOf(resultSet.getString("ticket_type")));
+    ticket.setTicketType(TicketType.valueOf(resultSet.getString("ticket_type")));
     ticket.setCreationDate(resultSet.getTimestamp("creation_date"));
     return ticket;
   }

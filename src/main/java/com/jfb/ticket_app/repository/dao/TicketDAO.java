@@ -1,7 +1,7 @@
 package com.jfb.ticket_app.repository.dao;
 
+import com.jfb.ticket_app.model.ticket.enums.TicketType;
 import com.jfb.ticket_app.model.ticket.Ticket;
-import com.jfb.ticket_app.model.ticket.enums.TicketTypes;
 
 import com.jfb.ticket_app.repository.dao.mappers.TicketRowMapper;
 import java.util.List;
@@ -36,7 +36,7 @@ public class TicketDAO {
     return jdbcTemplate.query(SELECT_TICKETS_BY_USER_ID, new TicketRowMapper(), userId);
   }
 
-  public void updateTicketType(String id, TicketTypes newType) {
+  public void updateTicketType(String id, TicketType newType) {
     jdbcTemplate.update(UPDATE_TICKET_TYPE, newType.name(), id);
   }
 }

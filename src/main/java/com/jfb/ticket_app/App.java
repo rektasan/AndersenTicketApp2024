@@ -1,17 +1,15 @@
 package com.jfb.ticket_app;
 
+import com.jfb.ticket_app.model.ticket.enums.TicketType;
 import com.jfb.ticket_app.config.AppConfig;
 import com.jfb.ticket_app.model.ticket.Ticket;
-import com.jfb.ticket_app.model.ticket.enums.TicketTypes;
 import com.jfb.ticket_app.model.user.Admin;
 import com.jfb.ticket_app.model.user.Client;
-import com.jfb.ticket_app.repository.dao.TicketDAO;
-import com.jfb.ticket_app.repository.dao.UserDAO;
 import com.jfb.ticket_app.service.TicketService;
+import com.jfb.ticket_app.service.UserService;
 
 import java.time.LocalDateTime;
 import java.sql.Timestamp;
-import java.util.Scanner;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -19,10 +17,12 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class App {
 
   public static void main(String[] args) {
-    testSpringTask();
+    testDatabaseAndSpringTasks();
   }
 
   public static void testOOPTask() {
+    System.err.println("Method is not implemented. Outdated code.");
+    /*
     TicketService eventTickets = new TicketService(10);
     Scanner scanner = new Scanner(System.in);
 
@@ -54,45 +54,42 @@ public class App {
       System.out.println("Ticket with id - " + inputID + " was not found.");
     }
     scanner.close();
+     */
   }
 
-  public static void testCollectionTask() {
-
-  }
-
-  public static void testSpringTask() {
+  public static void testDatabaseAndSpringTasks() {
     ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-    UserDAO userDao = context.getBean(UserDAO.class);
+    UserService userService = context.getBean(UserService.class);
     Admin adminEntry = new Admin("Boss");
     Client clientEntry = new Client("Client");
 
-    userDao.saveUser(adminEntry);
-    userDao.saveUser(clientEntry);
+    userService.saveUser(adminEntry);
+    userService.saveUser(clientEntry);
 
     System.out.println(adminEntry + " " + clientEntry + " are saved in users table inside my_ticket_service_db");
 
     System.out.println("Looking up the " + adminEntry + " by id. . .");
-    System.out.println(userDao.getUserById(adminEntry.getId()));
+    System.out.println(userService.getUserById(adminEntry.getId()));
 
-    TicketDAO ticketDao = context.getBean(TicketDAO.class);
-    Ticket adminTicket = new Ticket(adminEntry.getId(), TicketTypes.YEAR, Timestamp.valueOf(LocalDateTime.now()));
-    Ticket clientTicket = new Ticket(clientEntry.getId(), TicketTypes.YEAR, Timestamp.valueOf(LocalDateTime.now()));
+    TicketService ticketService = context.getBean(TicketService.class);
+    Ticket adminTicket = new Ticket(adminEntry.getId(), TicketType.YEAR, Timestamp.valueOf(LocalDateTime.now()));
+    Ticket clientTicket = new Ticket(clientEntry.getId(), TicketType.YEAR, Timestamp.valueOf(LocalDateTime.now()));
 
-    ticketDao.saveTicket(adminTicket);
-    ticketDao.saveTicket(clientTicket);
+    ticketService.saveTicket(adminTicket);
+    ticketService.saveTicket(clientTicket);
 
     System.out.println(adminTicket + " " + clientTicket + " are saved in tickets table inside my_ticket_service_db");
 
     System.out.println("Fetching tickets. . .");
-    System.out.println(ticketDao.getTicketById(adminTicket.getId()) + "\n" +
-        ticketDao.getTicketById(clientTicket.getId()) + "\n" +
-        ticketDao.getTicketById(clientTicket.getId()) + "\n" +
-        ticketDao.getTicketsByUserId(clientEntry.getId()));
+    System.out.println(ticketService.getTicketById(adminTicket.getId()) + "\n" +
+        ticketService.getTicketById(clientTicket.getId()) + "\n" +
+        ticketService.getTicketById(clientTicket.getId()) + "\n" +
+        ticketService.getTicketsByUserId(clientEntry.getId()));
 
-    ticketDao.updateTicketType(clientEntry.getId(), TicketTypes.MONTH);
+    ticketService.updateTicketType(clientEntry.getId(), TicketType.MONTH);
 
-    userDao.deleteUserAndTickets(adminEntry.getId());
-    userDao.deleteUserAndTickets(clientEntry.getId());
+    userService.deleteUserAndTickets(adminEntry.getId());
+    userService.deleteUserAndTickets(clientEntry.getId());
   }
 
 }
