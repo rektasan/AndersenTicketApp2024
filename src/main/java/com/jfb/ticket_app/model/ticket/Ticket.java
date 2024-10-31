@@ -26,9 +26,15 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class Ticket implements Identifiable, Printable {
 
+  @Setter
   private String id = generateId();
+  @Setter
   private String userId;
+  @Setter
   private TicketTypes ticketType;
+  @Setter
+  private Timestamp creationDate = Timestamp.valueOf(LocalDateTime.now());
+
   private String concertHall;
   private int eventCode;
   @Setter
@@ -39,7 +45,6 @@ public class Ticket implements Identifiable, Printable {
   private double maxBackpackWeight;
   @NullableWarning
   private BigDecimal ticketPrice;
-  private Timestamp creationDate = Timestamp.valueOf(LocalDateTime.now());
 
   public Ticket(TicketTypes ticketType, String concertHall, int eventCode, LocalDateTime time, boolean isPromo, StadiumSectors stadiumSector,
       double maxBackpackWeight, BigDecimal ticketPrice) {
