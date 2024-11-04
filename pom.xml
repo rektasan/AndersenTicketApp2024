@@ -15,8 +15,6 @@
 
     <lombok.version>1.18.34</lombok.version>
 
-    <dotenv.version>3.0.0</dotenv.version>
-
     <postgres.version>42.7.3</postgres.version>
 
     <spring.version>6.1.14</spring.version>
@@ -51,6 +49,11 @@
       <artifactId>spring-jdbc</artifactId>
       <version>${spring.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-tx</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -66,9 +69,9 @@
     </dependency>
 
     <dependency>
-      <groupId>io.github.cdimascio</groupId>
-      <artifactId>dotenv-java</artifactId>
-      <version>${dotenv.version}</version>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.18.1</version>
     </dependency>
 
   </dependencies>

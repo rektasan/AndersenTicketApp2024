@@ -5,9 +5,11 @@ import com.jfb.ticket_app.config.AppConfig;
 import com.jfb.ticket_app.model.ticket.Ticket;
 import com.jfb.ticket_app.model.user.Admin;
 import com.jfb.ticket_app.model.user.Client;
+import com.jfb.ticket_app.service.BusTicketFileReader;
 import com.jfb.ticket_app.service.TicketService;
 import com.jfb.ticket_app.service.UserService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.sql.Timestamp;
 
@@ -16,8 +18,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 public class App {
 
-  public static void main(String[] args) {
-    testDatabaseAndSpringTasks();
+  public static void main(String[] args) throws IOException {
+    testBusTicketReader();
   }
 
   public static void testOOPTask() {
@@ -90,6 +92,13 @@ public class App {
 
     userService.deleteUserAndTickets(adminEntry.getId());
     userService.deleteUserAndTickets(clientEntry.getId());
+  }
+
+  public static void testBusTicketReader() throws IOException {
+    ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+    BusTicketFileReader busTicketFileReader = context.getBean(BusTicketFileReader.class);
+
+    System.out.println(busTicketFileReader.getBusTickets());
   }
 
 }
