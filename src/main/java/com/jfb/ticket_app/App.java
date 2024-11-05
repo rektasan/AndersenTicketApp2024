@@ -5,9 +5,11 @@ import com.jfb.ticket_app.config.AppConfig;
 import com.jfb.ticket_app.model.ticket.Ticket;
 import com.jfb.ticket_app.model.user.Admin;
 import com.jfb.ticket_app.model.user.Client;
+import com.jfb.ticket_app.service.BusTicketFileReader;
 import com.jfb.ticket_app.service.TicketService;
 import com.jfb.ticket_app.service.UserService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.sql.Timestamp;
 
@@ -16,8 +18,9 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 public class App {
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
     testDatabaseAndSpringTasks();
+    testBusTicketReader();
   }
 
   public static void testOOPTask() {
@@ -62,9 +65,13 @@ public class App {
     UserService userService = context.getBean(UserService.class);
     Admin adminEntry = new Admin("Boss");
     Client clientEntry = new Client("Client");
+    Client clientJohn = new Client("John");
 
     userService.saveUser(adminEntry);
     userService.saveUser(clientEntry);
+    userService.saveUser(clientJohn);
+
+    userService.updateUserStatusAndCreateTicket(clientJohn, TicketType.YEAR);
 
     System.out.println(adminEntry + " " + clientEntry + " are saved in users table inside my_ticket_service_db");
 
@@ -90,6 +97,14 @@ public class App {
 
     userService.deleteUserAndTickets(adminEntry.getId());
     userService.deleteUserAndTickets(clientEntry.getId());
+    userService.deleteUserAndTickets(clientJohn.getId());
+  }
+
+  public static void testBusTicketReader() throws IOException {
+    ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+    BusTicketFileReader busTicketFileReader = context.getBean(BusTicketFileReader.class);
+
+    System.out.println(busTicketFileReader.getBusTickets());
   }
 
 }

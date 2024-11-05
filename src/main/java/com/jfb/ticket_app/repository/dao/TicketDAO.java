@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class TicketDAO {
@@ -24,18 +25,22 @@ public class TicketDAO {
     this.jdbcTemplate = jdbcTemplate;
   }
 
+  @Transactional
   public void saveTicket(Ticket ticket) {
     jdbcTemplate.update(INSERT_TICKET, ticket.getId(), ticket.getUserId(), ticket.getTicketType().name(), ticket.getCreationDate());
   }
 
+  @Transactional
   public Ticket getTicketById(String id) {
     return jdbcTemplate.queryForObject(SELECT_TICKET_BY_ID, new TicketRowMapper(), id);
   }
 
+  @Transactional
   public List<Ticket> getTicketsByUserId(String userId) {
     return jdbcTemplate.query(SELECT_TICKETS_BY_USER_ID, new TicketRowMapper(), userId);
   }
 
+  @Transactional
   public void updateTicketType(String id, TicketType newType) {
     jdbcTemplate.update(UPDATE_TICKET_TYPE, newType.name(), id);
   }
