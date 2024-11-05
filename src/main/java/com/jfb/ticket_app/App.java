@@ -19,6 +19,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class App {
 
   public static void main(String[] args) throws IOException {
+    testDatabaseAndSpringTasks();
     testBusTicketReader();
   }
 
@@ -64,9 +65,13 @@ public class App {
     UserService userService = context.getBean(UserService.class);
     Admin adminEntry = new Admin("Boss");
     Client clientEntry = new Client("Client");
+    Client clientJohn = new Client("John");
 
     userService.saveUser(adminEntry);
     userService.saveUser(clientEntry);
+    userService.saveUser(clientJohn);
+
+    userService.updateUserStatusAndCreateTicket(clientJohn, TicketType.YEAR);
 
     System.out.println(adminEntry + " " + clientEntry + " are saved in users table inside my_ticket_service_db");
 
@@ -92,6 +97,7 @@ public class App {
 
     userService.deleteUserAndTickets(adminEntry.getId());
     userService.deleteUserAndTickets(clientEntry.getId());
+    userService.deleteUserAndTickets(clientJohn.getId());
   }
 
   public static void testBusTicketReader() throws IOException {
