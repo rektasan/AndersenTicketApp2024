@@ -1,15 +1,12 @@
 package com.jfb.ticket_app.service;
 
 import com.jfb.ticket_app.model.user.User;
-
-import com.jfb.ticket_app.repository.TicketRepository;
 import com.jfb.ticket_app.repository.UserRepository;
 import com.jfb.ticket_app.service.exceptions.UserNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

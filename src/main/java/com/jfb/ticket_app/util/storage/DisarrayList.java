@@ -1,10 +1,9 @@
 package com.jfb.ticket_app.util.storage;
 
 import java.util.Arrays;
-
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import lombok.EqualsAndHashCode;
 
 @ToString
 @EqualsAndHashCode

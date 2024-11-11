@@ -1,15 +1,13 @@
 package com.jfb.ticket_app.service;
 
 import com.jfb.ticket_app.model.ticket.Ticket;
-
 import com.jfb.ticket_app.repository.TicketRepository;
 import com.jfb.ticket_app.service.exceptions.TicketNotFoundException;
+import java.util.Date;
 import java.util.List;
-
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,6 +31,10 @@ public class TicketService {
 
   public List<Ticket> getAllTickets() {
     return ticketRepository.findAll();
+  }
+
+  public List<Ticket> getTicketsBeforeDate(Date beforeDate) {
+    return ticketRepository.findTicketsBeforeDate(beforeDate);
   }
 
   public Ticket updateTicket(UUID id, Ticket updatedTicket) {
