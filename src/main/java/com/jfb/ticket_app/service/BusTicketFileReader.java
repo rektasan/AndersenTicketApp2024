@@ -1,6 +1,6 @@
 package com.jfb.ticket_app.service;
 
-import com.jfb.ticket_app.model.BusTicket;
+import com.jfb.ticket_app.model.ticket.BusTicket;
 import com.jfb.ticket_app.service.exceptions.InvalidTicketDataException;
 
 import java.io.BufferedReader;

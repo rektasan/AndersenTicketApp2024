@@ -1,46 +1,56 @@
 package com.jfb.ticket_app.service;
 
 import com.jfb.ticket_app.model.ticket.Ticket;
-import com.jfb.ticket_app.model.ticket.enums.TicketType;
-import com.jfb.ticket_app.repository.dao.TicketDAO;
-import com.jfb.ticket_app.util.interfaces.Identifiable;
 
+import com.jfb.ticket_app.repository.TicketRepository;
 import java.util.List;
 
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TicketService implements Identifiable {
+public class TicketService {
 
-  private final String CLASS_ID = generateId();
-  private final TicketDAO ticketDAO;
+  private TicketRepository ticketRepository;
 
   @Autowired
-  public TicketService(TicketDAO ticketDAO) {
-    this.ticketDAO = ticketDAO;
+  public TicketService(TicketRepository ticketRepository) {
+    this.ticketRepository = ticketRepository;
   }
 
   public void saveTicket(Ticket ticket) {
-    ticketDAO.saveTicket(ticket);
+    ticketRepository.save(ticket);
   }
 
-  public Ticket getTicketById(String id) {
-    return ticketDAO.getTicketById(id);
+  public Ticket getTicketById(UUID id) {
+    Optional<Ticket> ticket = ticketRepository.findById(id);
+    return ticket.orElse(null);
   }
 
-  public List<Ticket> getTicketsByUserId(String userId) {
-    return ticketDAO.getTicketsByUserId(userId);
+  public List<Ticket> getTicketsByUserId(UUID userId) {
+    return ticketRepository.findTicketsByUserId(userId);
   }
 
-  public void updateTicketType(String id, TicketType newType) {
-    ticketDAO.updateTicketType(id, newType);
+  public List<Ticket> getAllTickets() {
+    return ticketRepository.findAll();
   }
 
+  public Ticket updateTicket(UUID id, Ticket updatedTicket) {
+    Optional<Ticket> ticket = ticketRepository.findById(id);
 
-  @Override
-  public String getId() {
-    return this.CLASS_ID;
+    if (ticket.isPresent()) {
+      Ticket newTicket = ticket.get();
+      newTicket.setTicketType(updatedTicket.getTicketType());
+      newTicket.setUser(updatedTicket.getUser());
+      return ticketRepository.save(newTicket);
+    } else {
+      throw new IllegalArgumentException("Ticket with ID " + id + " not found.");
+    }
   }
 
+  public void deleteTicket(UUID id) {
+    ticketRepository.deleteById(id);
+  }
 }

@@ -1,42 +1,55 @@
 package com.jfb.ticket_app.service;
 
-import com.jfb.ticket_app.model.ticket.enums.TicketType;
 import com.jfb.ticket_app.model.user.User;
-import com.jfb.ticket_app.repository.dao.UserDAO;
-import com.jfb.ticket_app.util.interfaces.Identifiable;
 
+import com.jfb.ticket_app.repository.TicketRepository;
+import com.jfb.ticket_app.repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService implements Identifiable {
+public class UserService {
 
-  private final String CLASS_ID = generateId();
-  private final UserDAO userDAO;
+  private TicketRepository ticketRepository;
+  private UserRepository userRepository;
 
   @Autowired
-  public UserService(UserDAO userDAO) {
-    this.userDAO = userDAO;
+  public UserService(TicketRepository ticketRepository, UserRepository userRepository) {
+    this.ticketRepository = ticketRepository;
+    this.userRepository = userRepository;
   }
 
   public void saveUser(User user) {
-    userDAO.saveUser(user);
+    userRepository.save(user);
   }
 
-  public User getUserById(String id) {
-    return userDAO.getUserById(id);
+  public User getUserById(UUID id) {
+    Optional<User> user = userRepository.findById(id);
+    return user.orElse(null);
   }
 
-  public void deleteUserAndTickets(String id) {
-    userDAO.deleteUserAndTickets(id);
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
   }
 
-  public void updateUserStatusAndCreateTicket(User user, TicketType ticketType) {
-    userDAO.updateUserStatusAndCreateTicket(user, ticketType);
+  public User updateUser(UUID id, User updatedUser) {
+    Optional<User> optionalUser = userRepository.findById(id);
+
+    if (optionalUser.isPresent()) {
+      User existingUser = optionalUser.get();
+      existingUser.setName(updatedUser.getName());
+      existingUser.setStatus(updatedUser.getStatus());
+      return userRepository.save(existingUser);
+    } else {
+      throw new IllegalArgumentException("User with ID " + id + " not found.");
+    }
   }
 
-  @Override
-  public String getId() {
-    return this.CLASS_ID;
+  public void deleteUserAndTickets(UUID id) {
+    userRepository.deleteById(id);
   }
+
 }

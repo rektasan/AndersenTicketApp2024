@@ -1,4 +1,4 @@
-package com.jfb.ticket_app.model;
+package com.jfb.ticket_app.model.ticket;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
