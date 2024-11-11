@@ -3,22 +3,20 @@ package com.jfb.ticket_app.service;
 import com.jfb.ticket_app.model.ticket.Ticket;
 
 import com.jfb.ticket_app.repository.TicketRepository;
+import com.jfb.ticket_app.service.exceptions.TicketNotFoundException;
 import java.util.List;
 
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class TicketService {
 
-  private TicketRepository ticketRepository;
-
-  @Autowired
-  public TicketService(TicketRepository ticketRepository) {
-    this.ticketRepository = ticketRepository;
-  }
+  private final TicketRepository ticketRepository;
 
   public void saveTicket(Ticket ticket) {
     ticketRepository.save(ticket);
@@ -26,7 +24,7 @@ public class TicketService {
 
   public Ticket getTicketById(UUID id) {
     Optional<Ticket> ticket = ticketRepository.findById(id);
-    return ticket.orElse(null);
+    return ticket.orElseThrow(() -> new TicketNotFoundException("Ticket not found with id: " + id));
   }
 
   public List<Ticket> getTicketsByUserId(UUID userId) {
