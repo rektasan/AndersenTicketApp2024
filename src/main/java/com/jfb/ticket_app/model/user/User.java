@@ -2,18 +2,29 @@ package com.jfb.ticket_app.model.user;
 
 import com.jfb.ticket_app.model.ticket.Ticket;
 import com.jfb.ticket_app.model.ticket.enums.Status;
-import com.jfb.ticket_app.util.interfaces.Identifiable;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Getter
 @Setter
@@ -21,34 +32,31 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class User implements Identifiable {
+@Entity
+@Table(name = "users")
+public class User {
 
-  protected String id = generateId();
+  @Id
+  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.UUID)
+  protected UUID id;
+
+  @Column(name = "name")
   protected String name;
-  protected String role;
+
+  @Column(name = "status", nullable = false)
+  @Enumerated(EnumType.STRING)
   protected Status status = Status.DEACTIVATED;
+
+  @Column(name = "creation_date", nullable = false)
   protected Timestamp creationTime = Timestamp.valueOf(LocalDateTime.now());
+
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+  @Cascade(CascadeType.ALL)
   protected List<Ticket> userTickets = new ArrayList<>();
 
-  public User(String name, String role) {
-    this.name = name;
-    this.role = role;
-  }
-
-
-  public void addTicket(Ticket ticket) {
-    userTickets.add(ticket);
-    ticket.setUserId(this.id);
-  }
-
-
   public void printRole() {
-    System.out.println("Role: " + role);
-  };
-
-  @Override
-  public String getId() {
-    return this.id;
+    System.out.println("Role: " + this.getClass().getSimpleName());
   }
 
 }

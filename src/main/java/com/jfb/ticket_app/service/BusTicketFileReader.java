@@ -1,17 +1,14 @@
 package com.jfb.ticket_app.service;
 
-import com.jfb.ticket_app.model.BusTicket;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jfb.ticket_app.model.ticket.BusTicket;
 import com.jfb.ticket_app.service.exceptions.InvalidTicketDataException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;

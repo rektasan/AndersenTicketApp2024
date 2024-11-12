@@ -1,15 +1,13 @@
 package com.jfb.ticket_app.util.storage;
 
-import com.jfb.ticket_app.util.interfaces.Identifiable;
 import java.util.LinkedList;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
-public class MashSet<T> implements Identifiable {
+public class MashSet<T> {
 
-  private final String classId = generateId();
   private static final float LOAD_FACTOR = 0.75f;
   private static final int INITIAL_CAPACITY = 16;
 
@@ -98,11 +96,6 @@ public class MashSet<T> implements Identifiable {
       }
     }
     return allElements;
-  }
-
-  @Override
-  public String getId() {
-    return this.classId;
   }
 
 }

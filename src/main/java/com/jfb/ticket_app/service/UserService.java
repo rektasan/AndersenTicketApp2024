@@ -1,42 +1,53 @@
 package com.jfb.ticket_app.service;
 
-import com.jfb.ticket_app.model.ticket.enums.TicketType;
 import com.jfb.ticket_app.model.user.User;
-import com.jfb.ticket_app.repository.dao.UserDAO;
-import com.jfb.ticket_app.util.interfaces.Identifiable;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.jfb.ticket_app.repository.UserRepository;
+import com.jfb.ticket_app.service.exceptions.UserNotFoundException;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService implements Identifiable {
+@RequiredArgsConstructor
+public class UserService {
 
-  private final String CLASS_ID = generateId();
-  private final UserDAO userDAO;
-
-  @Autowired
-  public UserService(UserDAO userDAO) {
-    this.userDAO = userDAO;
-  }
+  private final UserRepository userRepository;
 
   public void saveUser(User user) {
-    userDAO.saveUser(user);
+    userRepository.save(user);
   }
 
-  public User getUserById(String id) {
-    return userDAO.getUserById(id);
+  public User getUserById(UUID id) {
+    Optional<User> user = userRepository.findById(id);
+    return user.orElseThrow(() -> (new UserNotFoundException("User not found with id: " + id)));
   }
 
-  public void deleteUserAndTickets(String id) {
-    userDAO.deleteUserAndTickets(id);
+  public User getUserByName(String name) {
+    Optional<User> user = userRepository.findUserByName(name);
+    return user.orElseThrow(() -> (new UserNotFoundException("User not found with name: " + name)));
   }
 
-  public void updateUserStatusAndCreateTicket(User user, TicketType ticketType) {
-    userDAO.updateUserStatusAndCreateTicket(user, ticketType);
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
   }
 
-  @Override
-  public String getId() {
-    return this.CLASS_ID;
+  public User updateUser(UUID id, User updatedUser) {
+    Optional<User> optionalUser = userRepository.findById(id);
+
+    if (optionalUser.isPresent()) {
+      User existingUser = optionalUser.get();
+      existingUser.setName(updatedUser.getName());
+      existingUser.setStatus(updatedUser.getStatus());
+      return userRepository.save(existingUser);
+    } else {
+      throw new IllegalArgumentException("User with ID " + id + " not found.");
+    }
   }
+
+  public void deleteUserAndTickets(UUID id) {
+    userRepository.deleteById(id);
+  }
+
 }
