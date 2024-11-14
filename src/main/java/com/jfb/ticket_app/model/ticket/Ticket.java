@@ -50,4 +50,9 @@ public class Ticket {
   @Column(name = "creation_date")
   private Timestamp creationDate = Timestamp.valueOf(LocalDateTime.now());
 
+  public Ticket(User user, TicketType ticketType) {
+    this.user = user;
+    this.ticketType = ticketType;
+  }
+
 }

@@ -55,6 +55,11 @@ public class User {
   @Cascade(CascadeType.ALL)
   protected List<Ticket> userTickets = new ArrayList<>();
 
+  public User(String name, Status status) {
+    this.name = name;
+    this.status = status;
+  }
+
   public void printRole() {
     System.out.println("Role: " + this.getClass().getSimpleName());
   }
