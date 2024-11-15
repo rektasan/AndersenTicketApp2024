@@ -1,6 +1,7 @@
 package com.jfb.ticket_app.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,35 +12,30 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
+@Configuration
 public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
+        .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/tickets/**").hasRole("ADMIN")
+            .requestMatchers("/tickets/*").authenticated()
             .anyRequest().permitAll()
         )
         .httpBasic(Customizer.withDefaults());
-    http
-        .csrf(csrf -> csrf.disable());
+
     return http.build();
   }
 
   @Bean
   public UserDetailsService userDetailsService() {
-    User.UserBuilder userBuilder = User.withDefaultPasswordEncoder();
-    UserDetails user = userBuilder
-        .username("user")
-        .password("password")
-        .roles("ADMIN")
-        .build();
-    UserDetails user1 = userBuilder
-        .username("user1")
+    UserDetails user = User.withDefaultPasswordEncoder()
+        .username("username")
         .password("password")
         .roles("USER")
         .build();
 
-    return new InMemoryUserDetailsManager(user, user1);
+    return new InMemoryUserDetailsManager(user);
   }
 }

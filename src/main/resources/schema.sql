@@ -7,10 +7,10 @@ CREATE TABLE users (
     id UUID PRIMARY KEY UNIQUE,
     name VARCHAR(255),
     status status,
-    creation_date TIMESTAMP);
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
 CREATE TABLE tickets (
     id UUID PRIMARY KEY UNIQUE,
     user_id UUID REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
     ticket_type ticket_type,
-    creation_date TIMESTAMP);
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);

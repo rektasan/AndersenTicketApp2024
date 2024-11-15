@@ -1,7 +1,11 @@
 package com.jfb.ticket_app.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.jfb.ticket_app.model.ticket.Ticket;
 import com.jfb.ticket_app.model.ticket.enums.Status;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,7 +17,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -23,8 +26,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 @Getter
 @Setter
@@ -33,6 +34,10 @@ import org.hibernate.annotations.CascadeType;
 @ToString
 @EqualsAndHashCode
 @Entity
+@JsonIdentityInfo(
+    generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "id"
+)
 @Table(name = "users")
 public class User {
 
@@ -49,10 +54,9 @@ public class User {
   protected Status status = Status.DEACTIVATED;
 
   @Column(name = "creation_date", nullable = false)
-  protected Timestamp creationTime = Timestamp.valueOf(LocalDateTime.now());
+  protected Timestamp creationTime;
 
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-  @Cascade(CascadeType.ALL)
+  @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "user")
   protected List<Ticket> userTickets = new ArrayList<>();
 
   public User(String name, Status status) {

@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class TicketService {
     ticketRepository.save(ticket);
   }
 
+  @Transactional
   public Ticket getTicketById(UUID id) {
     Optional<Ticket> ticket = ticketRepository.findById(id);
     return ticket.orElseThrow(() -> new TicketNotFoundException("Ticket not found with id: " + id));
